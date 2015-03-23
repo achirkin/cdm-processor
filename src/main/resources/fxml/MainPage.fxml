@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<!-- <?import layouttests.migfxml.sample1.*?> -->
+
+<AnchorPane id="rootPane" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" styleClass="main-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ethz.arch.ia.cdm.gui.MainPageController">
+   <children>
+   
+       
+      <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab fx:id="tabCreate" text="Create PDF">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#pickFilesForCreator" prefHeight="60.0" prefWidth="140.0" text="Pick maps" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <Label fx:id="selectedFilesLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" textAlignment="RIGHT" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <Button layoutX="14.0" layoutY="477.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#runPdfTextEditor" prefHeight="60.0" text="PDF template text" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                        <RadioButton fx:id="radioGBLayers" layoutX="252.0" layoutY="88.0" mnemonicParsing="false" selected="true" text="Layer names" AnchorPane.leftAnchor="250.0">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="GroupBy" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <Label layoutX="10.0" layoutY="71.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="220.0" text="Group pages by:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0" />
+                        <RadioButton fx:id="radioGBMaps" layoutX="526.0" layoutY="88.0" mnemonicParsing="false" text="Map names" toggleGroup="$GroupBy" AnchorPane.leftAnchor="520.0" />
+                        <Label layoutX="11.0" layoutY="171.0" prefHeight="35.0" prefWidth="380.0" text="Layers:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="150.0" />
+                        <Label layoutX="431.0" layoutY="171.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="380.0" text="Maps:" AnchorPane.leftAnchor="410.0" AnchorPane.topAnchor="150.0" />
+                        <TextArea fx:id="layerList" layoutX="14.0" layoutY="206.0" maxWidth="-Infinity" minWidth="-Infinity" onMouseExited="#submitButtonState" prefWidth="380.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="190.0" />
+                        <TextArea fx:id="mapList" layoutX="410.0" layoutY="190.0" maxWidth="-Infinity" minWidth="-Infinity" onMouseExited="#submitButtonState" prefWidth="380.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="410.0" AnchorPane.topAnchor="190.0" />
+                        <Button fx:id="submitButton" disable="true" layoutX="568.0" layoutY="472.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#generatePDF" prefHeight="60.0" prefWidth="170.0" text="Generate!" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+<!--                         <Button layoutX="508.0" layoutY="472.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#saveCreator" prefHeight="60.0" prefWidth="170.0" text="Save config" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="190.0" /> -->
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Parse images">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="selectedSheetsLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" textAlignment="RIGHT" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="buttonPickIm" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#pickFilesForParser" prefHeight="60.0" prefWidth="180.0" text="Pick images" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <CheckBox fx:id="colorCorrectionCheck" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" text="Use additional color correction" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0" />
+                        <ProgressBar fx:id="progressBar" layoutX="14.0" layoutY="484.0" prefHeight="36.0" prefWidth="592.0" progress="0.0" visible="false" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="14.0" />
+                        <Button fx:id="parseButton" disable="true" layoutX="616.0" layoutY="468.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#parseFiles" prefHeight="60.0" prefWidth="170.0" text="Parse!" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <TextArea fx:id="logArea" editable="false" layoutX="14.0" layoutY="140.0" prefHeight="332.0" prefWidth="780.0" wrapText="true" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="127.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextArea>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+
+</AnchorPane>

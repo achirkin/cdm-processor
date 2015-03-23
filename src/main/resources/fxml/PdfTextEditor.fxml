@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ethz.arch.ia.cdm.gui.PdfTextController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="380.0" text="Left-Top Corner" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="400.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="380.0" text="Right-Top Corner" textAlignment="RIGHT" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <TextArea fx:id="textLT" layoutX="20.0" layoutY="60.0" prefHeight="300.0" prefWidth="480.0" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
+      <TextArea fx:id="textRT" layoutX="410.0" layoutY="60.0" prefHeight="300.0" prefWidth="480.0" wrapText="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0" />
+      <TextArea fx:id="textRB" layoutX="418.0" layoutY="321.0" prefHeight="300.0" prefWidth="480.0" wrapText="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="420.0" />
+      <TextArea fx:id="textLB" layoutX="28.0" layoutY="321.0" prefHeight="300.0" prefWidth="480.0" wrapText="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="420.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="408.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="380.0" text="Right-Bottom Corner" textAlignment="RIGHT" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="370.0" />
+      <Label layoutX="22.0" layoutY="275.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="380.0" text="Left-Bottom Corner" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="370.0" />
+      <Button layoutX="686.0" layoutY="535.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="60.0" prefWidth="200.0" text="Apply" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <Button layoutX="374.0" layoutY="530.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="60.0" prefWidth="200.0" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="220.0" />
+   </children>
+</AnchorPane>
