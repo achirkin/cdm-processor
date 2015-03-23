@@ -8,12 +8,13 @@ Take a list of images as an input
 
 2) Given a scanned (or photographed) images of pages generated at step (1), extract images and save them as files with filenames constructed from QR code annotation.
 
-## Running
+## Building
 
 To build a .jar package with all libraries run maven goal:
     `mvn clean jfx:jar`
-The .jar file will be placed in folder /target/jfx/app/
-(Warning: a lot of native libraries)
+
+The .jar file will be placed in folder "/target/jfx/app/"
+(Warning: a lot of native libraries).
 
 More help on building Java FX jars at maven-javafx plugin web page: http://zenjava.com/javafx/maven/
 
