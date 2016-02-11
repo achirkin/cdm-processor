@@ -18,6 +18,7 @@ If you are not familiar with Java or `maven` development, follow the installatio
 As a result, you will have commands `java` and `mvn` available.
 
 To build a .jar package with all libraries run maven goal from the project's directory:
+
     `mvn clean jfx:jar`
 
 The .jar file will be placed in folder `target/jfx/app/`
@@ -37,6 +38,7 @@ If you encounter a program crash or freeze, please report it here in "Issues" pa
 
 A list of third-party libraries used in the project and their licenses can be found in FIRD-PARTY.txt
 For generating the list of licenses for third-party packages run:
+
     `mvn license:aggregate-add-third-party`
 
 More on license plugin: http://mojo.codehaus.org/license-maven-plugin/usage.html 
