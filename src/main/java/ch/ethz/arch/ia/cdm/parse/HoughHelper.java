@@ -1,19 +1,25 @@
 package ch.ethz.arch.ia.cdm.parse;
 
+
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+
 import static org.bytedeco.javacpp.helper.opencv_core.CV_RGB;
 import static org.bytedeco.javacpp.opencv_core.CV_32FC1;
 import static org.bytedeco.javacpp.opencv_core.CV_64FC2;
-import static org.bytedeco.javacpp.opencv_core.CV_AA;
+//import static org.bytedeco.javacpp.opencv_core.CV_AA;
 import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
 import static org.bytedeco.javacpp.opencv_core.cvCreateMat;
 import static org.bytedeco.javacpp.opencv_core.cvGet1D;
 import static org.bytedeco.javacpp.opencv_core.cvGetSeqElem;
-import static org.bytedeco.javacpp.opencv_core.cvLine;
+//import static org.bytedeco.javacpp.opencv_core.cvLine;
 import static org.bytedeco.javacpp.opencv_core.cvPerspectiveTransform;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseData;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseMat;
 import static org.bytedeco.javacpp.opencv_core.cvSet1D;
-import static org.bytedeco.javacpp.opencv_highgui.cvSaveImage;
+//import static org.bytedeco.javacpp.opencv_highgui.cvSaveImage;
 import static org.bytedeco.javacpp.opencv_imgproc.COLOR_GRAY2RGB;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_GAUSSIAN;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_HOUGH_PROBABILISTIC;
@@ -98,10 +104,19 @@ public class HoughHelper {
 	private static CvArr pointsByHough(IplImage image, IplImage colored, int attempt){ //, IplImage colored
 		CvMemStorage hstorage = CvMemStorage.create();
 		//CvSeq houghlines = cvHoughLines2(image, hstorage, CV_HOUGH_PROBABILISTIC, 1, Math.PI / 180, 400-50*attempt, 1100 - 100*attempt, 5 + 10*attempt);
-		CvSeq houghlines = cvHoughLines2(image, hstorage, CV_HOUGH_PROBABILISTIC, 1, Math.PI / 180,
-					(int)Math.round(Math.max(300-50*modifier, 1)),
-					Math.max(1200 - 100*modifier, 1),
-					(10 + 10*modifier)); //Math.PI / 180
+//		CvSeq houghlines = cvHoughLines2(image, hstorage, CV_HOUGH_PROBABILISTIC, 1, Math.PI / 180,
+//					(int)Math.round(Math.max(300-50*modifier, 1)),
+//					Math.max(1200 - 100*modifier, 1),
+//					(10 + 10*modifier)); //Math.PI / 180
+		
+		CvSeq houghlines = cvHoughLines2(
+				image, hstorage,
+				CV_HOUGH_PROBABILISTIC,
+				1,
+				Math.PI / 180,
+				(int)Math.round(Math.max(300-50*modifier, 1)),
+				Math.max(1200 - 100*modifier, 1),
+				(10 + 10*modifier), 0, CV_PI); //Math.PI / 180
 		if (houghlines.total() <= Math.max((minLines-attempt/2),1))
 		{
 			hstorage.release();
