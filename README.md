@@ -11,7 +11,7 @@ Take a list of images as an input
 ## Building and running
 
 First of all, you need
-[`JDK`](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+[`JDK`](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 and
 [`maven`](https://maven.apache.org/).
 If you are not familiar with Java or `maven` development, follow the installation instructions carefully.
