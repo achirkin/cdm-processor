@@ -17,7 +17,7 @@ import ch.ethz.arch.ia.cdm.parse.PdfParser;
 
 public class ConfigManager {
 	private static final String confFileName = "config.xml";
-	private static final String defConfFN = "config.xml";
+	private static final String defConfFN = "/config.xml";
 	
 	private final String userDirectory = System.getProperty("user.dir");
 	public String getDirectory(){
@@ -33,6 +33,7 @@ public class ConfigManager {
 	private XMLConfiguration config;
 	
 	public ConfigManager(){
+		try{
 		checkXml();
 		try {
 			config = new XMLConfiguration(getFullPath(confFileName));
@@ -43,6 +44,10 @@ public class ConfigManager {
 		}
 		setupCreator();
 		setupParser();
+		} catch (Exception ex) {
+			log.error("Failed to configure using file {}: " + ex.getMessage(), confFileName);
+			System.exit(1);
+		}
 	}
 	
 	public void setupCreator(){
@@ -90,15 +95,30 @@ public class ConfigManager {
 	
 	private void checkXml(){
 		File f = new File(getFullPath(confFileName));
+		boolean exists = false;
 		try {
-			if(f.exists() && f.isDirectory())
-				FileUtils.deleteDirectory(f);
+			if(f.exists()) {
+				if (f.isDirectory()) {
+					FileUtils.deleteDirectory(f);
+				} else if (f.length() <= 0) {
+					f.delete();
+				} else {
+					try {
+						@SuppressWarnings("unused")
+						XMLConfiguration c = new XMLConfiguration(f);
+						exists = true;
+						} catch (ConfigurationException e) {
+							f.delete();
+						}
+				}
+			}
 		} catch (IOException e) {
 			log.warn("Error occured while trying to delete directory " + confFileName + ": " + e.getMessage());
 		}
 		
-		if(!f.exists()){
-			InputStream defaultConfStream = ConfigManager.class.getClassLoader().getResourceAsStream(defConfFN);
+		
+		if(!exists){
+			InputStream defaultConfStream = getClass().getResourceAsStream(defConfFN);
 			try {
 				FileOutputStream os = 
 	                    new FileOutputStream(getFullPath(confFileName));
