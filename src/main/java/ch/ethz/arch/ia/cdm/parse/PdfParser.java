@@ -3,10 +3,6 @@
  */
 package ch.ethz.arch.ia.cdm.parse;
 
-
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_highgui.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
 import org.bytedeco.javacpp.opencv_core.*;
 
 import static org.bytedeco.javacpp.helper.opencv_core.CV_RGB;
@@ -19,15 +15,17 @@ import static org.bytedeco.javacpp.opencv_core.cvInRangeS;
 import static org.bytedeco.javacpp.opencv_core.cvMixChannels;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseData;
 import static org.bytedeco.javacpp.opencv_core.cvSize;
-import static org.bytedeco.javacpp.opencv_highgui.CV_LOAD_IMAGE_COLOR;
-import static org.bytedeco.javacpp.opencv_highgui.cvLoadImage;
-import static org.bytedeco.javacpp.opencv_highgui.cvSaveImage;
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_imgproc.COLOR_RGB2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 import static org.bytedeco.javacpp.opencv_imgproc.cvGetPerspectiveTransform;
 import static org.bytedeco.javacpp.opencv_imgproc.cvWarpPerspective;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,6 +42,8 @@ import org.bytedeco.javacpp.opencv_core.CvPoint;
 import org.bytedeco.javacpp.opencv_core.CvSize;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacpp.helper.opencv_core.CvArr;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -189,8 +189,10 @@ public class PdfParser {
 	            size.height(image.getHeight());
 	            // parse each page in a .pdf
 //	            IplImage oimg = IplImage.createFrom(image);
-	            IplImage oimg = IplImage.create(size, 8, 4);
-	            oimg.copyFrom(image);
+	            OpenCVFrameConverter.ToIplImage converter1 = new OpenCVFrameConverter.ToIplImage();
+	            Java2DFrameConverter converter2 = new Java2DFrameConverter();
+	            
+	            IplImage oimg = converter1.convert(converter2.convert(image));
 	    		IplImage im = IplImage.create(size, 8, 3);
 	    		
 	    		int from_to[] = { 1,0, 2,1, 3,2};
@@ -426,7 +428,11 @@ public class PdfParser {
 			cvWarpPerspective(greyImg, qrImage, QRtransform, 0, CV_RGB(255,255,255)); //WARP_INVERSE_MAP
 	        cvInRangeS(qrImage, CV_RGB(cut_level, cut_level, cut_level), CV_RGB(255, 255, 255), qrImage);
 			
-			BufferedImage bw = qrImage.getBufferedImage();
+	        OpenCVFrameConverter.ToIplImage converter1 = new OpenCVFrameConverter.ToIplImage();
+            Java2DFrameConverter converter2 = new Java2DFrameConverter();
+	        
+			//BufferedImage bw = ImageIO.read(new ByteArrayInputStream(qrImage.asByteBuffer().array()));
+			BufferedImage bw = converter2.convert(converter1.convert(qrImage));
 			BufferedImage qrCodeImg = new BufferedImage(bw.getWidth(), bw.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 			qrCodeImg.getGraphics().drawImage(bw, 0, 0, null);
 			try {
@@ -461,7 +467,7 @@ public class PdfParser {
 					cut_level += cut_level <= 100 ? change : (-change);
 					change += 10 + (cut_level < 100 ? 10 : 0);
 					
-					bw = qrImage.getBufferedImage();
+					bw = ImageIO.read(new ByteArrayInputStream(qrImage.asByteBuffer().array()));
 					qrCodeImg = new BufferedImage(bw.getWidth(), bw.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 					qrCodeImg.getGraphics().drawImage(bw, 0, 0, null);
 					

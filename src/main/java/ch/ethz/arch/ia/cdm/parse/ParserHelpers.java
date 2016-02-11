@@ -1,5 +1,11 @@
 package ch.ethz.arch.ia.cdm.parse;
 
+
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+
 //import static org.bytedeco.javacpp.helper.opencv_core.CV_RGB;
 //import static org.bytedeco.javacpp.helper.opencv_core.cvDrawContours;
 import static org.bytedeco.javacpp.helper.opencv_imgproc.cvFindContours;
