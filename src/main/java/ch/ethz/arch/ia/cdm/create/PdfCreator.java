@@ -183,7 +183,7 @@ public class PdfCreator {
 	        	}
 	        PDPage page = pages.get(0);
 			try {
-				BufferedImage image = page.convertToImage(BufferedImage.TYPE_4BYTE_ABGR, 100);
+				BufferedImage image = page.convertToImage(BufferedImage.TYPE_4BYTE_ABGR, 300);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, "png", baos);
 				img = Image.getInstance(baos.toByteArray());
