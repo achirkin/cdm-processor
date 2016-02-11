@@ -467,7 +467,7 @@ public class PdfParser {
 					cut_level += cut_level <= 100 ? change : (-change);
 					change += 10 + (cut_level < 100 ? 10 : 0);
 					
-					bw = ImageIO.read(new ByteArrayInputStream(qrImage.asByteBuffer().array()));
+					bw = converter2.convert(converter1.convert(qrImage));
 					qrCodeImg = new BufferedImage(bw.getWidth(), bw.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 					qrCodeImg.getGraphics().drawImage(bw, 0, 0, null);
 					
