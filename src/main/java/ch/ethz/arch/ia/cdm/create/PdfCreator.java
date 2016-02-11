@@ -3,14 +3,26 @@
  */
 package ch.ethz.arch.ia.cdm.create;
 
+import static org.bytedeco.javacpp.opencv_core.cvMixChannels;
+import static org.bytedeco.javacpp.opencv_core.cvSize;
+
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.bytedeco.javacpp.opencv_core.CvSize;
+import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +153,52 @@ public class PdfCreator {
 		document.add(bcimg);
 		
 		// add image
-		Image img = Image.getInstance(imgFilePath);
+		Image img;
+		if (imgFilePath.toLowerCase().endsWith(".pdf")) {
+			
+			PDDocument imgDoc;
+			try {
+				File f = new File(imgFilePath);
+				if(f.exists() && !f.isDirectory())
+					imgDoc = PDDocument.load(imgFilePath);
+				else
+					throw new FileNotFoundException("image " + imgFilePath + " is not found.");
+			} catch (IOException e) {
+				throw new IOException("Could not load pdf file.", e);
+			}
+			
+			List<PDPage> pages;
+			try {
+				pages = (List<PDPage>)imgDoc.getDocumentCatalog().getAllPages();
+			} catch (ClassCastException e)
+			{
+				imgDoc.close();
+				throw e;
+			}
+
+	        int pagesSize = pages.size();
+	        if (pagesSize < 1){
+	        	imgDoc.close();
+	        	throw new IOException("Empty PDF: " + imgFilePath);
+	        	}
+	        PDPage page = pages.get(0);
+			try {
+				BufferedImage image = page.convertToImage(BufferedImage.TYPE_4BYTE_ABGR, 100);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, "png", baos);
+				img = Image.getInstance(baos.toByteArray());
+			} catch (IOException e) {
+				imgDoc.close();
+				throw new IOException("Could not read first page of pdf: " + e.getMessage(), e);
+			}
+			imgDoc.close();
+		}
+		else img = Image.getInstance(imgFilePath);
+		
+		
+		
+		
+		
 		img.scaleToFit(mapWidth, mapHeight);
 		float a = img.getWidth() / img.getHeight();
 		

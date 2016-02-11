@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<cdmConfig>
+<pdfText> <!-- default text on corners of generated .pdf pages -->
+		<lefttop>Test left upper corner text
+- 0014530</lefttop>
+		<leftbottom>Left bottom corner
+line two
+Be carefull with line spaces in xml!</leftbottom>
+		<righttop>Here is a very long sentence. Paragraph objects knows how to add line spacing if the added text exceeds the right edge of the document. Line spacing is measured in user units. There are 72 units per inch.</righttop>
+		<rightbottom>If you want to put new line explicitly
+Just start a new line in this xml (without starting spaces)</rightbottom>
+	</pdfText>
+<groupMapsBy>LAYERNAMES</groupMapsBy>
+<!-- one of these {MAPNAMES, LAYERNAMES}. Defines how to group file in .pdf (used for ordered printing) -->
+<defaultLayers> <!-- just add several more layers with "layer" tag. These layers are generated for each map and put into one output .pdf -->
+		<layer>green</layer>
+		<layer>traffic</layer>
+		<layer>isovist</layer>
+		<layer>one more layer</layer>
+	</defaultLayers>
+<parsedImg>
+		<extension>.jpg</extension> <!-- extension of images when we store them after parsing -->
+		<size>2000</size> <!-- size of the resulting images. -->
+		<margin>10</margin> <!-- margin to cut off between image borders and a map itself. Used to delete occasional black frames on resulting images. -->
+		<correctColors>false</correctColors> <!-- "true" or "false" - whether to do post-processing stage to {try to} make background really white -->
+	</parsedImg>
+</cdmConfig>
