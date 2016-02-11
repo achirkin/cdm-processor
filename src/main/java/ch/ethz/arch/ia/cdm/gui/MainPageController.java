@@ -126,16 +126,15 @@ public class MainPageController {
     	textFlow.setMinWidth(w);
     	textFlow.setMaxWidth(w);
     	
+        popupStage.show();
+    	popupStage.sizeToScene();
+    	popupStage.centerOnScreen();
 		MainApp.mainWindow.hide();
     	log.debug("Starting PdfCreator...");
     	
     	try {
-            popupStage.show();
-        	popupStage.sizeToScene();
-        	popupStage.centerOnScreen();
 			PdfCreator.createPdf(createdPDF);
 	    	log.debug("Finished creation of a document.");
-            popupStage.hide();
             popupStage.close();
 	    	MainApp.mainWindow.show();
 	    	Thread t = new Thread(new Runnable() {
@@ -165,7 +164,6 @@ public class MainPageController {
 			}).start();
 	    	
 		} catch (DocumentException | IOException | WriterException e) {
-            popupStage.hide();
             popupStage.close();
 			MainApp.mainWindow.show();
 			log.error("Failed to create document: " + e.getMessage(), e);
