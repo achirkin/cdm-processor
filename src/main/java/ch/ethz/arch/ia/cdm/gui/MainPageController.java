@@ -12,6 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.Group;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -22,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Popup;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.LogManager;
@@ -92,18 +99,74 @@ public class MainPageController {
 		fc.setInitialFileName("task_" + (System.currentTimeMillis() % 10000000) + ".pdf");
 		File createdPDF = fc.showSaveDialog(MainApp.mainWindow);
 		
+    	
+
+    	final Stage popupStage = new Stage();
+    	String family = "Helvetica";
+    	double size = 40;
+    	double w = MainApp.mainWindow.getWidth()/2;
+    	double h = MainApp.mainWindow.getHeight()/4;
+    	double x = MainApp.mainWindow.getX() + MainApp.mainWindow.getWidth()/4;
+    	double y = MainApp.mainWindow.getY() + MainApp.mainWindow.getHeight()/4;
+    	TextFlow textFlow = new TextFlow();
+    	textFlow.setTextAlignment(TextAlignment.CENTER);
+    	Text text1 = new Text("Please wait...");
+    	text1.setTextAlignment(TextAlignment.CENTER);
+    	text1.setFont(Font.font(family, size));
+    	textFlow.getChildren().addAll(text1);
+    	Group group = new Group(textFlow);
+    	Scene scene = new Scene(group, w, h, Color.color(0.95, 0.95, 0.95));
+        popupStage.setWidth(w);
+        popupStage.setHeight(h);
+    	popupStage.setTitle("Program is in progress");
+    	popupStage.setScene(scene);
+    	popupStage.setResizable(false);    	
+    	textFlow.setLayoutY((h-size)/2);
+    	textFlow.setPrefWidth(w);
+    	textFlow.setMinWidth(w);
+    	textFlow.setMaxWidth(w);
+    	
 		MainApp.mainWindow.hide();
     	log.debug("Starting PdfCreator...");
+    	
     	try {
+            popupStage.show();
+        	popupStage.sizeToScene();
+        	popupStage.centerOnScreen();
 			PdfCreator.createPdf(createdPDF);
 	    	log.debug("Finished creation of a document.");
+            popupStage.hide();
+            popupStage.close();
 	    	MainApp.mainWindow.show();
-	    	try{
-			java.awt.Desktop.getDesktop().open(createdPDF);
-	    	} catch (IOException ex) {
-	    		log.warn("Could not open document: " + ex.getMessage());
-	    	}
+	    	Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						java.awt.Desktop.getDesktop().open(createdPDF);
+				    } catch (Exception ex) {
+				    	log.warn("Could not open document: " + ex.getMessage());
+				    }
+				}
+			});
+	    	t.start();
+	    	new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try{
+						
+						for(int i = 0; i < 20 && t.isAlive(); i++)
+							Thread.sleep(500);
+						if (t.isAlive())
+							t.interrupt();
+					} catch(Exception ex) {
+						
+					}
+				}
+			}).start();
+	    	
 		} catch (DocumentException | IOException | WriterException e) {
+            popupStage.hide();
+            popupStage.close();
 			MainApp.mainWindow.show();
 			log.error("Failed to create document: " + e.getMessage(), e);
 		}
